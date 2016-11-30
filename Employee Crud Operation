@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee Details</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover{background-color:#f5f5f5}
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body ng-app="myApp" ng-cloak ng-controller="employeeController">
+<div style="overflow-x:auto;">
+<table cellpadding="2" cellspacing="2" border="1">
+    <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Delete</th>
+        <th>Edit</th>
+    </tr>
+    <tr ng-repeat="employee in employeeLists">
+        <td>{{ employee.id }}</td>
+        <td>{{ employee.Name }}</td>
+        <td>{{ employee.Department }}</td>
+        <td>{{ employee.Salary }}</td>
+        <td><button ng-click="del(employee.id)">Delete</button></td>
+        <td><button ng-click="selectEdit(employee.id)">Edit</button></td>
+    </tr>
+</table>
+
+<h3>Employee Information</h3>
+<table cellpadding="2" cellspacing="2" border="1">
+    <tr>
+        <td>ID</td>
+        <td><input type="text" ng-model="id"></td>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td><input type="text" ng-model="Name"></td>
+    </tr>
+    <tr>
+        <td>Department</td>
+        <td><input type="text" ng-model="Department"></td>
+    </tr>
+    <tr>
+        <td>Salary</td>
+        <td><input type="text" ng-model="Salary"></td>
+    </tr>
+
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <input type="button" value="Add" ng-click="add()">
+            <input type="button" value="Save" ng-click="edit()">
+        </td>
+    </tr>
+</table>
+</div>
+
+<script>
+    var myApp = angular.module('myApp', []);
+    myApp.controller('employeeController', function($scope){
+        $scope.employeeLists = [
+            {id: "P1", Name: "Supreeth", Department: "HR", Salary: "10K"},
+            {id: "P2", Name: "Rajkumar", Department: "Support", Salary: "50K"},
+            {id: "P3", Name: "Hemanth", Department: "Security", Salary: "70K"},
+            {id: "P4", Name: "Pradeep", Department: "Accounts", Salary: "80K"},
+        ];
+
+        $scope.add = function(){
+          $scope.employeeLists.push(
+                  {id: $scope.id, Name: $scope.Name, Department: $scope.Name, Salary: $scope.Salary}
+                  );
+            $scope.id = '';
+            $scope.Name = '';
+            $scope.Department = '';
+            $scope.Salary = '';
+        };
+
+        $scope.edit = function(){
+            var index=getSelectedIndex($scope.id);
+            $scope.employeeLists[index].id = $scope.id;
+            $scope.employeeLists[index].Name = $scope.Name;
+            $scope.employeeLists[index].Department = $scope.Department;
+            $scope.employeeLists[index].Salary = $scope.Salary;
+        };
+
+        $scope.selectEdit = function(id){
+            var index=getSelectedIndex(id);
+            var emp = $scope.employeeLists[index];
+            $scope.id = emp.id;
+            $scope.Name = emp.Name;
+            $scope.Department = emp.Department;
+            $scope.Salary = emp.Salary;
+        };
+
+        $scope.del = function(id){
+            var result = confirm('Are you Sure');
+            if(result==true){
+                var index=getSelectedIndex(id);
+                $scope.employeeLists.splice(index, 1);
+            }
+        };
+
+        function getSelectedIndex(id){
+         for(var i=0; i<$scope.employeeLists.length; i++){
+             if($scope.employeeLists[i].id==id)
+                 return i;
+         }
+        }
+    });
+</script>
+
+
+</body>
+</html>
